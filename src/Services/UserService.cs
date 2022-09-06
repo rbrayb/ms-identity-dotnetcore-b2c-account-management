@@ -12,12 +12,33 @@ namespace b2c_ms_graph
 {
     class UserService
     {
-        
+        static public FileStream ostrm;
+        static public StreamWriter writer;
+        static public TextWriter oldOut = Console.Out;
+
         //<ms_docref_get_list_of_user_accounts>
         public static async Task ListUsers(GraphServiceClient graphClient)
         {
-            Console.WriteLine("Getting list of users...");
+            // Change the name of the file here
+            
+            try
+            {
+                ostrm = new FileStream("./AllUsers.json", FileMode.OpenOrCreate, FileAccess.Write);
+                writer = new StreamWriter(ostrm);
+            }
 
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot open Redirect.txt for writing");
+                Console.WriteLine(e.Message);
+                return;
+            }
+
+            Console.WriteLine("Getting list of users...");
+            Console.SetOut(writer);
+
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            
             try
             {
                 // Get all users
@@ -27,7 +48,31 @@ namespace b2c_ms_graph
                     {
                         e.DisplayName,
                         e.Id,
-                        e.Identities
+                        e.Identities,
+                        e.AccountEnabled,
+                        e.CreatedDateTime,
+                        e.GivenName,
+                        e.Mail,
+                        e.OtherMails,
+                        e.UserPrincipalName,
+                        e.UserType,
+                        //e.Birthday,
+                        e.Authentication,
+                        e.City,
+                        e.CompanyName,
+                        e.Country,
+                        e.Department,
+                        e.EmployeeHireDate,
+                        e.EmployeeId,
+                        //e.HireDate,
+                        //e.OfficeLocation,  
+                        e.PasswordPolicies,
+                        e.People,
+                        e.PostalCode,
+                        //e.PreferredName,
+                        e.State,
+                        e.StreetAddress,
+                        e.Surname,                        
                     })
                     .GetAsync();
 
@@ -39,8 +84,12 @@ namespace b2c_ms_graph
                         // Callback executed for each user in the collection
                         (user) =>
                         {
-                            Console.WriteLine(JsonSerializer.Serialize(user));
-                            return true;
+                            string jsonString = JsonSerializer.Serialize(user, options);
+
+                            Console.WriteLine(jsonString);
+
+                            // Console.WriteLine(JsonSerializer.Serialize(user), options);
+                            return true;                            
                         },
                         // Used to configure subsequent page requests
                         (req) =>
@@ -52,12 +101,17 @@ namespace b2c_ms_graph
 
                 await pageIterator.IterateAsync();
             }
+            
             catch (Exception ex)
             {
+                Console.SetOut(UserService.oldOut);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
             }
+
+            writer.Close();
+            ostrm.Close();
         }
         //</ms_docref_get_list_of_user_accounts>
 

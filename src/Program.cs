@@ -7,6 +7,7 @@ using Microsoft.Graph;
 using Azure.Identity;
 using Microsoft.Identity.Client;
 using System.Net.Http.Headers;
+using System.IO;
 
 namespace b2c_ms_graph
 {
@@ -22,7 +23,8 @@ namespace b2c_ms_graph
             var scopes = new[] { "https://graph.microsoft.com/.default" };
             var clientSecretCredential = new ClientSecretCredential(config.TenantId, config.AppId, config.ClientSecret);
             var graphClient = new GraphServiceClient(clientSecretCredential, scopes);
-            //</ms_docref_set_auth_provider>
+            //</ms_docref_set_auth_provider>           
+            
             PrintCommands();
 
             try
@@ -30,6 +32,7 @@ namespace b2c_ms_graph
                 while (true)
                 {
                     Console.Write("Enter command, then press ENTER: ");
+                                       
                     string decision = Console.ReadLine();
                     switch (decision.ToLower())
                     {
@@ -72,15 +75,19 @@ namespace b2c_ms_graph
                             break;
                     }
 
+                    Console.SetOut(UserService.oldOut);
                     Console.ResetColor();
                 }
             }
+            
             catch (Exception ex)
             {
+                Console.SetOut(UserService.oldOut);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"An error occurred: {ex}");
                 Console.ResetColor();
-            }
+            }            
+
             Console.ReadLine();
         }
 
@@ -98,7 +105,7 @@ namespace b2c_ms_graph
             Console.WriteLine("[6]      Create users (bulk import)");
             Console.WriteLine("[7]      Create user with custom attributes and show result");
             Console.WriteLine("[8]      Get all users (one page) with custom attributes");
-            Console.WriteLine("[9]      Get the number of useres in the directory");
+            Console.WriteLine("[9]      Get the number of users in the directory");
             Console.WriteLine("[help]   Show available commands");
             Console.WriteLine("[exit]   Exit the program");
             Console.WriteLine("-------------------------");
