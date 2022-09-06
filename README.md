@@ -18,7 +18,7 @@ urlFragment: "manage-b2c-users-dotnet-core-ms-graph"
 
 This fork changes option 1 (Get All Users) to write the output to a file instead of to the console.
 
-It also displays more B2C attributes
+It also displays more B2C attributes and formats the output to make it far more readable.
 
 
 ----------
