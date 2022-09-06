@@ -14,6 +14,10 @@ urlFragment: "manage-b2c-users-dotnet-core-ms-graph"
 
 # Azure AD B2C user account management with .NET Core and Microsoft Graph
 
+**Note**
+
+This fork changes option 1 (Get All Users) to write the output to a file instead of to the console.
+
 This .NET Core console application demonstrates the use of the Microsoft Graph API to perform user account management operations (create, read, update, delete) within an Azure AD B2C directory. Also shown is a technique for the bulk import of users from a JSON file. Bulk import is useful in migration scenarios like moving your users from a legacy identity provider to Azure AD B2C.
 
 The code in this sample backs the [Manage Azure AD B2C user accounts with Microsoft Graph](https://docs.microsoft.com/azure/active-directory-b2c/manage-user-accounts-graph-api) article on docs.microsoft.com.
