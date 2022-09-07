@@ -38,7 +38,10 @@ namespace b2c_ms_graph
             Console.SetOut(writer);
 
             var options = new JsonSerializerOptions { WriteIndented = true };
-            
+
+            // Some attributes are commented out for a reason.
+            // Refer https://medium.com/the-new-control-plane/spo-licence-error-using-graph-api-with-azure-ad-b2c-855d6524e7c6
+
             try
             {
                 // Get all users
